@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.4;
+  width: 100vw;
+  height: 100vh;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+}
+
+.todoList-container {
+  position: absolute;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 25px;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e91d6;
+  left: 50%;
+  transform: translate(-50%);
+  border: solid 3px #0072bb;
+}
+
+.todoItems-wrapper {
+  display: flex;
+  flex-direction: column;
+}
