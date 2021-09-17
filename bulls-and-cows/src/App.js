@@ -1,6 +1,20 @@
 import React, { useState } from "react";
 import "./App.css";
 
+function App() {
+  const [number, setNumber] = useState(0);
+  const add = () => {
+    setNumber((prevNumber) => prevNumber + 1);
+  };
+  const subtract = () => {
+    setNumber((prevNumber) => prevNumber - 1);
+  };
+  const multiply = () => {
+    setNumber((prevNumber) => prevNumber * 2);
+  };
+  const divide = () => {
+    setNumber((prevNumber) => prevNumber / 2);
+  };
 
   return (
     <div className="App">
