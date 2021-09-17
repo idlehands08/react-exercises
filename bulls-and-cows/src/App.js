@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import randomcolor from "randomcolor";
 import "./App.css";
 
 function App() {
