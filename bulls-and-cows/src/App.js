@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 style={{ color: color }}>{number}</h1>
+        <h1>{number}</h1>
         <button onClick={add}>Add!</button>
         <button onClick={subtract}>Subtract!</button>
         <button onClick={multiply}>Multiply!</button>
