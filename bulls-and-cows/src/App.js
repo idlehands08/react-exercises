@@ -2,7 +2,6 @@ import React, { useState } from "react";
 // import randomcolor from "randomcolor";
 import "./App.css";
 
-// test test 123
 function App() {
   const [number, setNumber] = useState(0);
   const add = () => {
