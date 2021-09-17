@@ -18,10 +18,6 @@ function App() {
     setNumber((prevNumber) => prevNumber / 2);
   };
 
-  // useEffect(() => {
-  //   setColor(randomcolor());
-  // }, [number]);
-
   return (
     <div className="App">
       <header className="App-header">
