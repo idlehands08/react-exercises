@@ -4,7 +4,6 @@ import "./App.css";
 
 function App() {
   const [number, setNumber] = useState(0);
-  const [color, setColor] = useState("red");
   const add = () => {
     setNumber((prevNumber) => prevNumber + 1);
   };
