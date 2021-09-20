@@ -1,45 +1,46 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-
-function PlayerInput({ playerInput, index }) {
-  const { entry, tryNumber, bulls, cows } = playerInput;
-  return (
-    <div className="playerInput">
-      Player entered {entry} - Tries: {tryNumber} - Bulls: {bulls}, Cows:
-      {cows}
-    </div>
-  );
-}
+import cowImage from "./images/Cow.png";
+import bullImage from "./images/Bull.png";
 
 const InputForm = ({ checkInput, isUnique }) => {
   const [value, setValue] = useState("");
+  const [alertMessage, setAlertMessage] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!value.trim()) {
-      alert("You did not enter anything");
-    } else if (value.length > 4) {
-      alert("You can only input a 4 digit number");
+      setMessage("Invalid Input! You did not enter anything");
+      setAlertMessage(true);
+    } else if (!isInteger(value)) {
+      setMessage("Invalid Input! Only numbers are allowed");
+      setAlertMessage(true);
     } else if (!isUnique(value)) {
-      alert(
-        "The value you entered is invalid. Input 4 digit number where each digit is a unique number"
-      );
+      setMessage("Invalid Input! Each digit must be unique");
+      setAlertMessage(true);
     } else {
       checkInput(value);
+      setAlertMessage(false);
     }
+
     setValue("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form autoComplete="off" onSubmit={handleSubmit}>
       <input
-        type="number"
+        id="input-field"
+        type="text"
         className="player-input"
+        maxLength="4"
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      <input id="submitButton" type="submit" value="Try" className="btn" />
+      {alertMessage ? <h4 id="alert-message">{message}</h4> : <></>}
+
+      <input id="submitButton" type="submit" value="Enter" className="btn" />
     </form>
   );
 };
@@ -57,14 +58,15 @@ const isUnique = (randomDigits) => {
   return !/(.).*?\1/.test(randomDigits);
 };
 
-// const isPositiveInteger = (value) => {
-//   return ^[1-9]+[0-9]*$.test(value)
-// }
+const isInteger = (value) => {
+  return /^\d+$/.test(value);
+};
 
 function App() {
   const [secretNumber, setSecretNumber] = useState(""); // the randomly generated number to be guessed by the player
   const [playerInputs, setPlayerInputs] = useState([]); // player input
   const [tryCounter, setTryCounter] = useState(0); //the nth input/try of the player
+  const [win, setWin] = useState(false);
 
   //generates a secretNumber on webpage load.
   useEffect(() => {
@@ -72,7 +74,7 @@ function App() {
   }, []);
 
   //checks and returns the number of bulls and cows in the value entered by the player on the input text box.
-  //also checks if the player wins and calls on the handleWin function.
+  //also checks if the player wins and sets Win use State to true.
   const checkInput = (value) => {
     var bulls = 0;
     var cows = 0;
@@ -87,41 +89,108 @@ function App() {
         }
       }
     }
+    setTryCounter(tryCounter + 1);
     if (bulls === 4) {
-      handleWin();
+      setWin(true);
     }
     addHistory(value, bulls, cows);
-    setTryCounter(tryCounter + 1);
   };
 
-  //enteres a new entry onto our history array called playerInputs.
+  //enteres a new input onto our history array called playerInputs.
   const addHistory = (value, bulls, cows) => {
     const newPlayerInput = {
-      entry: value,
-      tryNumber: tryCounter,
+      input: value,
+      tryNumber: tryCounter + 1,
       bulls: bulls,
       cows: cows,
     };
     setPlayerInputs([...playerInputs, newPlayerInput]);
   };
 
-  const handleWin = () => {
-    alert(`You won in ${tryCounter} tries`);
-  };
-
   return (
     <div className="App">
+      <div className="bull-image-div">
+        <img src={bullImage} alt="" />
+      </div>
+      <div className="cow-image-div">
+        <img src={cowImage} alt="" />
+      </div>
+      <div className="game-title">
+        <span id="title-bulls">BULLS</span>
+        <span id="title-and">&</span>
+        <span id="title-cows">COWS</span>
+      </div>
       <div className="container-main">
-        <h1>{secretNumber}</h1>
-        <InputForm
-          checkInput={checkInput}
-          isUnique={isUnique}
-          tryCounter={tryCounter}
-        />
-        <div className="history-list">
-          {playerInputs.map((playerInput, index) => (
-            <PlayerInput key={index} index={index} playerInput={playerInput} />
-          ))}
+        {win ? (
+          <div className="winning-message">
+            <h1>You have won in {tryCounter + " tries"}</h1>
+            <button
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
+        <div className="flex-row-item">
+          <h1 id="fourth-digit" className="secret-number">
+            {win ? secretNumber.charAt(0) : "?"}
+          </h1>
+          <h1 id="third-digit" className="secret-number">
+            {win ? secretNumber.charAt(1) : "?"}
+          </h1>
+          <h1 id="second-digit" className="secret-number">
+            {win ? secretNumber.charAt(2) : "?"}
+          </h1>
+          <h1 id="first-digit" className="secret-number">
+            {win ? secretNumber.charAt(3) : "?"}
+          </h1>
+        </div>
+        <div className="container-inputForm">
+          <InputForm
+            checkInput={checkInput}
+            isUnique={isUnique}
+            tryCounter={tryCounter}
+          />
+          {playerInputs.length > 0 ? (
+            <div className="history-list">
+              <div className="flex-column-item">
+                <span className="label">Input</span>
+                {playerInputs.map((playerInput, index) => (
+                  <span className="history-playerInput">
+                    {playerInput.input}
+                  </span>
+                ))}
+              </div>
+              <div className="flex-column-item">
+                <span className="label">Tries</span>
+                {playerInputs.map((playerInput, index) => (
+                  <span className="history-playerInput">
+                    {playerInput.tryNumber}
+                  </span>
+                ))}
+              </div>
+              <div className="flex-column-item">
+                <span className="label">Bulls</span>
+                {playerInputs.map((playerInput, index) => (
+                  <span className="history-playerInput">
+                    {playerInput.bulls}
+                  </span>
+                ))}
+              </div>
+              <div className="flex-column-item">
+                <span className="label">Cows</span>
+                {playerInputs.map((playerInput, index) => (
+                  <span className="history-playerInput">
+                    {playerInput.cows}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -129,3 +198,4 @@ function App() {
 }
 
 export default App;
+export { generateRandomNumber, isUnique, isInteger };
