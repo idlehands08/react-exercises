@@ -60,51 +60,12 @@ body {
   align-items: center;
 }
 
-.container-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%);
-}
-
-.winning-message {
+.container-inputForm {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 300px;
-  width: 600px;
-
-  background: var(--color-lightBlue);
-  border-radius: 10px;
-  border: var(--color-darkBrown) solid 5px;
 }
-
-.winning-message button {
-  margin-top: 25px;
-  padding: 10px;
-  font-family: stardewRegular;
-  background: none;
-  color: var(--color-darkBrown);
-  border: none;
-  font-size: 3rem;
-  font-weight: 600;
-  border: 2px solid var(--color-darkBrown);
-  border-radius: 10px;
-}
-
-.winning-message button:hover {
-  transform: scale(1.2);
-  transition: 0.2s all ease;
-}
-
 .history-list {
   display: flex;
   align-items: center;
@@ -130,19 +91,7 @@ body {
   margin-bottom: 10px;
   font-size: 1.8rem;
 }
-.bull-image-div {
-  position: absolute;
-  top: 30%;
-  left: -200px;
-  transform: scale(1.3);
-}
 
-.cow-image-div {
-  position: absolute;
-  top: 30%;
-  right: -200px;
-  transform: scale(1.3);
-}
 .game-title {
   position: absolute;
   top: 0;
@@ -164,10 +113,12 @@ body {
 
 #title-bulls {
   color: var(--color-bull);
+  text-transform: uppercase;
 }
 
 #title-cows {
   color: black;
+  text-transform: uppercase;
 }
 
 form {
@@ -178,15 +129,8 @@ form {
 }
 
 #alert-message {
-  padding-top: 25px;
+  padding: 25px;
   font-size: 1.8rem;
-}
-.secret-number {
-  border: 2px solid var(--color-darkBrown);
-  margin: 5px;
-  width: 50px;
-  text-align: center;
-  border-radius: 5px;
 }
 
 #input-field {

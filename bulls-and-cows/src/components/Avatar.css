@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.bull-image-div {
+  position: absolute;
+  top: 30%;
+  left: -200px;
+  transform: scale(1.3);
+}
+
+.cow-image-div {
+  position: absolute;
+  top: 30%;
+  right: -200px;
+  transform: scale(1.3);
+}

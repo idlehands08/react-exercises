@@ -1,49 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import "./App.css";
 import cowImage from "./images/Cow.png";
 import bullImage from "./images/Bull.png";
-
-const InputForm = ({ checkInput, isUnique }) => {
-  const [value, setValue] = useState("");
-  const [alertMessage, setAlertMessage] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!value.trim()) {
-      setMessage("Invalid Input! You did not enter anything");
-      setAlertMessage(true);
-    } else if (!isInteger(value)) {
-      setMessage("Invalid Input! Only numbers are allowed");
-      setAlertMessage(true);
-    } else if (!isUnique(value)) {
-      setMessage("Invalid Input! Each digit must be unique");
-      setAlertMessage(true);
-    } else {
-      checkInput(value);
-      setAlertMessage(false);
-    }
-
-    setValue("");
-  };
-
-  return (
-    <form autoComplete="off" onSubmit={handleSubmit}>
-      <input
-        id="input-field"
-        type="text"
-        className="player-input"
-        maxLength="4"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      {alertMessage ? <h4 id="alert-message">{message}</h4> : <></>}
-
-      <input id="submitButton" type="submit" value="Enter" className="btn" />
-    </form>
-  );
-};
+import Title from "./components/Title";
+import Avatar from "./components/Avatar";
+import SecretNumberDisplay from "./components/SecretNumberDisplay";
+import InputForm from "./components/InputForm";
+import WinningMessage from "./components/WinningMessage";
+import PlayerHistory from "./components/PlayerHistory";
 
 //recursion function to generate a random number with unique digits.
 const generateRandomNumber = () => {
@@ -66,6 +30,9 @@ function App() {
   const [secretNumber, setSecretNumber] = useState(""); // the randomly generated number to be guessed by the player
   const [playerInputs, setPlayerInputs] = useState([]); // player input
   const [tryCounter, setTryCounter] = useState(0); //the nth input/try of the player
+  const [value, setValue] = useState("");
+  const [alertMessage, setAlertMessage] = useState(false);
+  const [message, setMessage] = useState("");
   const [win, setWin] = useState(false);
 
   //generates a secretNumber on webpage load.
@@ -96,6 +63,26 @@ function App() {
     addHistory(value, bulls, cows);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!value.trim()) {
+      setMessage("Invalid Input! You did not enter anything");
+      setAlertMessage(true);
+    } else if (!isInteger(value)) {
+      setMessage("Invalid Input! Only numbers are allowed");
+      setAlertMessage(true);
+    } else if (!isUnique(value)) {
+      setMessage("Invalid Input! Each digit must be unique");
+      setAlertMessage(true);
+    } else {
+      checkInput(value);
+      setAlertMessage(false);
+    }
+
+    setValue("");
+  };
+
   //enteres a new input onto our history array called playerInputs.
   const addHistory = (value, bulls, cows) => {
     const newPlayerInput = {
@@ -107,92 +94,61 @@ function App() {
     setPlayerInputs([...playerInputs, newPlayerInput]);
   };
 
+  function returnSecretDisplay() {
+    let testVar = [];
+    for (let i = 0; i < secretNumber.length; i++) {
+      testVar.push(<SecretNumberDisplay secretKey={secretNumber.charAt(i)} />);
+    }
+    return testVar;
+  }
+
   return (
     <div className="App">
-      <div className="bull-image-div">
-        <img src={bullImage} alt="" />
-      </div>
-      <div className="cow-image-div">
-        <img src={cowImage} alt="" />
-      </div>
+      <Avatar imgFile={bullImage} className="bull-image-div" />
+      <Avatar imgFile={cowImage} className="cow-image-div" />
       <div className="game-title">
-        <span id="title-bulls">BULLS</span>
-        <span id="title-and">&</span>
-        <span id="title-cows">COWS</span>
+        <Title titleText="bulls" />
+        <Title titleText="&" />
+        <Title titleText="cows" />
       </div>
-      <div className="container-main">
-        {win ? (
-          <div className="winning-message">
-            <h1>You have won in {tryCounter + " tries"}</h1>
-            <button
-              onClick={() => {
-                window.location.reload();
-              }}
-            >
-              Reset
-            </button>
+      <div className="flex-row-item">{returnSecretDisplay()}</div>
+      <div className="container-inputForm">
+        <InputForm
+          value={value}
+          setValue={setValue}
+          handleSubmit={handleSubmit}
+        />
+        {alertMessage ? <h4 id="alert-message">{message}</h4> : <></>}
+      </div>
+      {win ? <WinningMessage tryCounter={tryCounter} /> : <></>}
+      {playerInputs.length > 0 ? (
+        <div className="history-list">
+          <div className="flex-column-item">
+            <span className="label">Input</span>
+            {playerInputs.map((playerInput, index) => (
+              <PlayerHistory playerInput={playerInput} type="input" />
+            ))}
           </div>
-        ) : (
-          <></>
-        )}
-        <div className="flex-row-item">
-          <h1 id="fourth-digit" className="secret-number">
-            {win ? secretNumber.charAt(0) : "?"}
-          </h1>
-          <h1 id="third-digit" className="secret-number">
-            {win ? secretNumber.charAt(1) : "?"}
-          </h1>
-          <h1 id="second-digit" className="secret-number">
-            {win ? secretNumber.charAt(2) : "?"}
-          </h1>
-          <h1 id="first-digit" className="secret-number">
-            {win ? secretNumber.charAt(3) : "?"}
-          </h1>
+          <div className="flex-column-item">
+            <span className="label">Tries</span>
+            {playerInputs.map((playerInput, index) => (
+              <PlayerHistory playerInput={playerInput} type="tryCounter" />
+            ))}
+          </div>
+          <div className="flex-column-item">
+            <span className="label">Bulls</span>
+            {playerInputs.map((playerInput, index) => (
+              <PlayerHistory playerInput={playerInput} type="bulls" />
+            ))}
+          </div>
+          <div className="flex-column-item">
+            <span className="label">Cows</span>
+            {playerInputs.map((playerInput, index) => (
+              <PlayerHistory playerInput={playerInput} type="cows" />
+            ))}
+          </div>
         </div>
-        <div className="container-inputForm">
-          <InputForm
-            checkInput={checkInput}
-            isUnique={isUnique}
-            tryCounter={tryCounter}
-          />
-          {playerInputs.length > 0 ? (
-            <div className="history-list">
-              <div className="flex-column-item">
-                <span className="label">Input</span>
-                {playerInputs.map((playerInput, index) => (
-                  <span className="history-playerInput">
-                    {playerInput.input}
-                  </span>
-                ))}
-              </div>
-              <div className="flex-column-item">
-                <span className="label">Tries</span>
-                {playerInputs.map((playerInput, index) => (
-                  <span className="history-playerInput">
-                    {playerInput.tryNumber}
-                  </span>
-                ))}
-              </div>
-              <div className="flex-column-item">
-                <span className="label">Bulls</span>
-                {playerInputs.map((playerInput, index) => (
-                  <span className="history-playerInput">
-                    {playerInput.bulls}
-                  </span>
-                ))}
-              </div>
-              <div className="flex-column-item">
-                <span className="label">Cows</span>
-                {playerInputs.map((playerInput, index) => (
-                  <span className="history-playerInput">
-                    {playerInput.cows}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }

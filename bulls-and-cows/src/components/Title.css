@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* COLORS */
+  --color-lightBlue: #59c9f1;
+  --color-darkBlue: #151152;
+  --color-Red: #b52121;
+  --color-darkBrown: #6b3710;
+  --color-lightBrown: #dda059;
+  --color-yellow: #ffd921;
+}
+
+#BULLS {
+  color: var(--color-Red);
+}
+
+#COWS {
+  color: black;
+}

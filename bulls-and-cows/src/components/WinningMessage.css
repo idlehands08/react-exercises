@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.winning-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 300px;
+  width: 600px;
+
+  background: var(--color-lightBlue);
+  border-radius: 10px;
+  border: var(--color-darkBrown) solid 5px;
+}
+
+.winning-message button {
+  margin-top: 25px;
+  padding: 10px;
+  font-family: stardewRegular;
+  background: none;
+  color: var(--color-darkBrown);
+  border: none;
+  font-size: 3rem;
+  font-weight: 600;
+  border: 2px solid var(--color-darkBrown);
+  border-radius: 10px;
+}
+
+.winning-message button:hover {
+  transform: scale(1.2);
+  transition: 0.2s all ease;
+}
